@@ -21,4 +21,12 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
   findAll() {
     return this.repo.find();
   }
+
+  insertDocument(document: DocumentOrmEntity) {
+    return this.repo.insert(document);
+  }
+
+  updateDocument(document: DocumentOrmEntity) {
+    return this.repo.update(document.id, {documentId: document.documentId,documentName: document.documentName, status: document.status});
+  }
 }
