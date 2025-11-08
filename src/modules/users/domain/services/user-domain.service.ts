@@ -1,0 +1,28 @@
+import { User, UserPrimitiveProps } from "../entities/user.entity";
+import { UserRepository } from "../repositories/user.repository";
+
+export interface RegisterUserCommand {
+  firstName: string;
+  lastName: string;
+  now?: Date;
+}
+
+export class UserDomainService {
+  constructor(private readonly repository: UserRepository) {}
+
+  async registerUser(command: RegisterUserCommand): Promise<User> {
+    const user = User.register({
+      firstName: command.firstName,
+      lastName: command.lastName,
+      now: command.now,
+    });
+
+    await this.repository.save(user);
+    return user;
+  }
+
+  async listUsers(): Promise<UserPrimitiveProps[]> {
+    const users = await this.repository.findAll();
+    return users.map((user) => user.toPrimitives());
+  }
+}
