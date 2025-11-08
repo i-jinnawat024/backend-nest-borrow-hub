@@ -26,7 +26,7 @@ const entities = [join(rootPath, '**', 'entities', '*.entity.{ts,js}')];
             encrypt: false,
           },
           logging: false,
-          autoLoadEntities: true,      
+          autoLoadEntities: true,
         };
       },
     }),
