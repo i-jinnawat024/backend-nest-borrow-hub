@@ -1,4 +1,4 @@
-import { IQuery } from "@nestjs/cqrs";
+import { IQuery } from '@nestjs/cqrs';
 
 export class GetDocumentListQuery implements IQuery {
   constructor() {}

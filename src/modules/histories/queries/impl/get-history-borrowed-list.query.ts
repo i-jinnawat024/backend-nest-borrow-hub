@@ -1,7 +1,5 @@
-import { IQuery } from "@nestjs/cqrs";
+import { IQuery } from '@nestjs/cqrs';
 
-export class GetHistoryBorrowedListQuery implements IQuery{
-    constructor(
-        public readonly userId: string,
-    ){}
+export class GetHistoryBorrowedListQuery implements IQuery {
+  constructor(public readonly userId: string) {}
 }

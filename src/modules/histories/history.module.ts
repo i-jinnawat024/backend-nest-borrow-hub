@@ -21,7 +21,7 @@ import { GetHistoryUserHandler } from './queries/handlers/get-history-user.handl
     UpdateHistoryHandler,
     GetHistoryListHandler,
     GetHistoryDocumentHandler,
-    GetHistoryUserHandler
+    GetHistoryUserHandler,
   ],
   exports: [HistoryAdapter],
 })

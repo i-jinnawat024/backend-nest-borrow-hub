@@ -1,6 +1,11 @@
-import { DomainError } from "../errors/domain-error";
+import { DomainError } from '../errors/domain-error';
 
-export const USER_STATUS = ["pending", "active", "inactive", "suspended"] as const;
+export const USER_STATUS = [
+  'pending',
+  'active',
+  'inactive',
+  'suspended',
+] as const;
 export type UserStatusType = (typeof USER_STATUS)[number];
 
 export class UserStatus {
@@ -15,7 +20,7 @@ export class UserStatus {
   }
 
   static pending(): UserStatus {
-    return new UserStatus("pending");
+    return new UserStatus('pending');
   }
 
   get value(): UserStatusType {
@@ -23,6 +28,6 @@ export class UserStatus {
   }
 
   isActive(): boolean {
-    return this.value === "active";
+    return this.value === 'active';
   }
 }
