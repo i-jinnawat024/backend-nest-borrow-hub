@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { EHistoryStatus } from '../enums/history-status.enum';
 
 @Entity('borrow_history_logs')
 export class HistoryEntity {
@@ -23,6 +24,9 @@ export class HistoryEntity {
 
   @Column({ name: 'user_id' })
   userId: string;
+
+  @Column()
+  status: EHistoryStatus;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

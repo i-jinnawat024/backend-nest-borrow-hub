@@ -31,7 +31,6 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
     if (!document.id) {
       throw new BadRequestException('document.id is required for update');
     }
-
     const patch: Partial<DocumentOrmEntity> = {};
     if (document.documentId !== undefined)
       patch.documentId = document.documentId;

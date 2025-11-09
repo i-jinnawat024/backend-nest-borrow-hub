@@ -22,7 +22,7 @@ export class DocumentOrmEntity {
   createdAt!: Date;
 
   @UpdateDateColumn({name:'updated_at'})
-  updatedAt: Date;
+  updatedAt: Date| null;
 
   @DeleteDateColumn({name:'deleted_at'})
   deletedAt?: Date;

@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { User, UserPrimitiveProps } from "../entities/user.entity";
 import { DomainError } from "../errors/domain-error";
 import { UserRepository } from "../repositories/user.repository";
@@ -11,7 +12,7 @@ export interface RegisterUserCommand {
 
 export class UserDomainService {
   constructor(private readonly repository: UserRepository) {}
-
+  private readonly logger = new Logger(UserDomainService.name);
   async registerUser(command: RegisterUserCommand): Promise<User> {
     const user = User.register({
       firstName: command.firstName,
