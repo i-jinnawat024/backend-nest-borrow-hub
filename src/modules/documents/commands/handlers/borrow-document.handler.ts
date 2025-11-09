@@ -44,7 +44,8 @@ export class BorrowDocumentHandler
     await this.documentRepo.updateDocument({
       id: document.id,
       documentId: document.documentId,
-      status: EDocumentStatus.BORROWED
+      status: EDocumentStatus.BORROWED,
+      updatedAt: undefined
     });
      await this.historyAdapter.insertDocumentHistory(
       document.id,

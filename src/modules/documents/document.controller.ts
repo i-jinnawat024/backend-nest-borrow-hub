@@ -17,6 +17,8 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { UpdateDocumentCommand } from './commands/impl/update-document.command';
 import { BorrowDocumentDto } from './dtos/borrow-document.dto';
 import { BorrowDocumentCommand } from './commands/impl/borrow-document.command';
+import { ReturnDocumentCommand } from './commands/impl/return-document.command';
+import { ReturnDocumentDto } from './dtos/return.document.dto';
 
 @Controller('documents')
 export class DocumentController {
@@ -38,9 +40,7 @@ export class DocumentController {
 
   @Post()
   createDocument(@Body() body: CreateDocumentDto) {
-    return this.commandBus.execute(
-      new CreateDocumentCommand(body),
-    );
+    return this.commandBus.execute(new CreateDocumentCommand(body));
   }
   @Put()
   updateDocument(@Body() updateDocumentDto: UpdateDocumentDto) {
@@ -50,8 +50,11 @@ export class DocumentController {
   }
   @Post('borrow')
   borrowDocument(@Body() body: BorrowDocumentDto) {
-    return this.commandBus.execute(
-      new BorrowDocumentCommand(body),
-    );
+    return this.commandBus.execute(new BorrowDocumentCommand(body));
+  }
+
+  @Put('return')
+  returnDocument(@Body() body: ReturnDocumentDto) {
+    return this.commandBus.execute(new ReturnDocumentCommand(body));
   }
 }

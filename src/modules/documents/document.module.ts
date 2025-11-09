@@ -13,6 +13,7 @@ import { DocumentAdapter } from './adapters/document.adapter';
 import { BorrowDocumentHandler } from './commands/handlers/borrow-document.handler';
 import { UserModule } from '../users/user.module';
 import { HistoryModule } from '../histories/history.module';
+import { ReturnDocumentHandler } from './commands/handlers/return-document.handler';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { HistoryModule } from '../histories/history.module';
     UpdateDocumentHandler,
     DocumentAdapter,
     BorrowDocumentHandler,
+    ReturnDocumentHandler,
   ],
   exports: [DocumentAdapter],
 })

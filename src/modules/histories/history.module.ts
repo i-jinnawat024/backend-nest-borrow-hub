@@ -6,11 +6,12 @@ import { HistoryEntity } from "./entities/history.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { HistoryRepository } from "./repositories/history.repository";
 import { HistoryAdapter } from "./adapters/history.adapter";
+import { UpdateHistoryHandler } from "./commands/handlers/update-history.handler";
 
 @Module({
     imports:[CqrsModule, TypeOrmModule.forFeature([HistoryEntity])],
     controllers:[HistoryController],
-    providers:[CreateHistoryHandler,HistoryRepository,HistoryAdapter],
+    providers:[CreateHistoryHandler,HistoryRepository,HistoryAdapter,UpdateHistoryHandler],
     exports:[HistoryAdapter]
 })
 export class HistoryModule {}
