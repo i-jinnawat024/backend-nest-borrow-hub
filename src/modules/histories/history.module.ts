@@ -5,13 +5,12 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { HistoryEntity } from "./entities/history.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { HistoryRepository } from "./repositories/history.repository";
-import { DocumentModule } from "../documents/document.module";
-import { DocumentAdapter } from "../documents/adapters/document.adapter";
-import { UserModule } from "../users/user.module";
+import { HistoryAdapter } from "./adapters/history.adapter";
 
 @Module({
-    imports:[CqrsModule, DocumentModule, UserModule, TypeOrmModule.forFeature([HistoryEntity])],
+    imports:[CqrsModule, TypeOrmModule.forFeature([HistoryEntity])],
     controllers:[HistoryController],
-    providers:[CreateHistoryHandler,HistoryRepository]
+    providers:[CreateHistoryHandler,HistoryRepository,HistoryAdapter],
+    exports:[HistoryAdapter]
 })
 export class HistoryModule {}

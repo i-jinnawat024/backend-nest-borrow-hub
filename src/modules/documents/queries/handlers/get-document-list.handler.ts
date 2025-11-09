@@ -9,6 +9,7 @@ export class GetDocumentListHandler implements IQueryHandler<GetDocumentListQuer
   ) {}
 
   async execute(query: GetDocumentListQuery) {
-    return this.documentRepo.findAll();
+    const result = await this.documentRepo.findAll();
+    return result
   }
 }

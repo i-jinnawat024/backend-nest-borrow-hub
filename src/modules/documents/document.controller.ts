@@ -15,6 +15,8 @@ import { CreateDocumentDto } from './dtos/create-document.dto';
 import { CreateDocumentCommand } from './commands/impl/create-document.command';
 import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { UpdateDocumentCommand } from './commands/impl/update-document.command';
+import { BorrowDocumentDto } from './dtos/borrow-document.dto';
+import { BorrowDocumentCommand } from './commands/impl/borrow-document.command';
 
 @Controller('documents')
 export class DocumentController {
@@ -29,7 +31,7 @@ export class DocumentController {
     return this.queryBus.execute(new GetDocumentQuery(id));
   }
 
-  @Get()
+  @Get('document-list')
   getDocumentList() {
     return this.queryBus.execute(new GetDocumentListQuery());
   }
@@ -44,6 +46,12 @@ export class DocumentController {
   updateDocument(@Body() updateDocumentDto: UpdateDocumentDto) {
     return this.commandBus.execute(
       new UpdateDocumentCommand(updateDocumentDto),
+    );
+  }
+  @Post('borrow')
+  borrowDocument(@Body() body: BorrowDocumentDto) {
+    return this.commandBus.execute(
+      new BorrowDocumentCommand(body),
     );
   }
 }
