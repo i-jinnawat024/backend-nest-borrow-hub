@@ -3,6 +3,9 @@ import { CreateHistoryDto } from "../../dtos/create-history.dto";
 
 export class CreateHistoryCommand implements ICommand{
     constructor(
-        public readonly body: CreateHistoryDto
+        public readonly documentId: number,
+        public readonly userId: string,
+        public readonly name: string,
+        public readonly description: string,
     ){}
 }

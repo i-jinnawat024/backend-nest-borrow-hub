@@ -13,13 +13,5 @@ export class HistoryController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Get("users")
-  getUsersViaHistory(): Promise<UserResponseDto[]> {
-    return this.queryBus.execute(new GetUsersListQuery());
-  }
 
-  @Post()
-  createHistory(@Body() body: CreateHistoryDto) {
-    return this.commandBus.execute(new CreateHistoryCommand(body));
-  }
 }

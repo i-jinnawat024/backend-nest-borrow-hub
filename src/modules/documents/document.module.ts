@@ -10,14 +10,29 @@ import { GetDocumentHandler } from './queries/handlers/get-document.handler';
 import { CreateDocumentHandler } from './commands/handlers/create-document.handler';
 import { UpdateDocumentHandler } from './commands/handlers/update-document.handler';
 import { DocumentAdapter } from './adapters/document.adapter';
+import { BorrowDocumentHandler } from './commands/handlers/borrow-document.handler';
+import { UserModule } from '../users/user.module';
+import { HistoryModule } from '../histories/history.module';
+import { ReturnDocumentHandler } from './commands/handlers/return-document.handler';
 
 @Module({
   imports: [
     CqrsModule,
+    UserModule,
+    HistoryModule,
     TypeOrmModule.forFeature([BorrowHistoryLogsOrmEntity, DocumentOrmEntity]),
   ],
   controllers: [DocumentController],
-  providers: [GetDocumentListHandler, DocumentRepository, GetDocumentHandler,CreateDocumentHandler,UpdateDocumentHandler,DocumentAdapter],
+  providers: [
+    GetDocumentListHandler,
+    DocumentRepository,
+    GetDocumentHandler,
+    CreateDocumentHandler,
+    UpdateDocumentHandler,
+    DocumentAdapter,
+    BorrowDocumentHandler,
+    ReturnDocumentHandler,
+  ],
   exports: [DocumentAdapter],
 })
 export class DocumentModule {}
