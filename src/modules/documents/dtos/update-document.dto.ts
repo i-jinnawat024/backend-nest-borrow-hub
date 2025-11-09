@@ -12,7 +12,11 @@ export class UpdateDocumentDto {
 
     @IsString()
     @IsNotEmpty()
-    documentName: string;
+    firstName: string;
+
+    @IsString()
+    @IsNotEmpty()
+    lastName: string;
 
     @IsString()
     @IsNotEmpty()

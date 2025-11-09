@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 
@@ -26,7 +26,7 @@ export class TypeormUserRepository implements UserRepository {
   }
 
   async findById(userId: UserId): Promise<User | null> {
-    const entity = await this.ormRepo.findOne({ where: { id: userId.value } });
+    const entity = await this.ormRepo.findOneBy({ id: userId.value });
     if (!entity) {
       return null;
     }

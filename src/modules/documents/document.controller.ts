@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Logger, Patch, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Patch,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetDocumentListQuery } from './queries/impl/get-document-list.query';
 import { GetDocumentQuery } from './queries/impl/get-documnet.query';
@@ -15,21 +24,26 @@ export class DocumentController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Get(':id')
-  getDocument(@Query('id') id: string) {
+  @Get()
+  getDocument(@Query('id') id: number) {
     return this.queryBus.execute(new GetDocumentQuery(id));
   }
+
   @Get()
   getDocumentList() {
     return this.queryBus.execute(new GetDocumentListQuery());
   }
 
   @Post()
-  createDocument(@Body() createDocumentDto: CreateDocumentDto) {
-    return this.commandBus.execute(new CreateDocumentCommand(createDocumentDto));
+  createDocument(@Body() body: CreateDocumentDto) {
+    return this.commandBus.execute(
+      new CreateDocumentCommand(body),
+    );
   }
   @Put()
   updateDocument(@Body() updateDocumentDto: UpdateDocumentDto) {
-    return this.commandBus.execute(new UpdateDocumentCommand(updateDocumentDto));
+    return this.commandBus.execute(
+      new UpdateDocumentCommand(updateDocumentDto),
+    );
   }
 }

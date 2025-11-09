@@ -4,13 +4,16 @@ import { EDocumentStatus } from "../enums/document-status.enum";
 @Entity('documents')
 export class DocumentOrmEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({name:"document_id"})
-  documentId: string;
+  documentId: number;
 
-  @Column({name:'document_name'})
-  documentName: string;
+  @Column({name:'first_name'})
+  firstName:string
+
+  @Column({name:'last_name'})
+  lastName:string
 
   @Column()
   status: EDocumentStatus
