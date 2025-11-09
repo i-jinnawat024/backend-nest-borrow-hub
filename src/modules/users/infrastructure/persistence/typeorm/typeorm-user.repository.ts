@@ -1,13 +1,13 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
 
-import { User, UserRolePrimitive } from "../../../domain/entities/user.entity";
-import { UserRepository } from "../../../domain/repositories/user.repository";
-import { UserId } from "../../../domain/value-objects/user-id.vo";
-import { RoleOrmEntity } from "./roles.orm-entity";
-import { UserOrmEntity } from "./user.orm-entity";
-import { UserRoleOrmEntity } from "./user-role.orm-entity";
+import { User, UserRolePrimitive } from '../../../domain/entities/user.entity';
+import { UserRepository } from '../../../domain/repositories/user.repository';
+import { UserId } from '../../../domain/value-objects/user-id.vo';
+import { RoleOrmEntity } from './roles.orm-entity';
+import { UserOrmEntity } from './user.orm-entity';
+import { UserRoleOrmEntity } from './user-role.orm-entity';
 
 @Injectable()
 export class TypeormUserRepository implements UserRepository {
@@ -41,11 +41,21 @@ export class TypeormUserRepository implements UserRepository {
       return [];
     }
 
-    const rolesMap = await this.buildRolesMap(entities.map((entity) => entity.id));
-    return entities.map((entity) => this.toDomain(entity, rolesMap.get(entity.id)));
+    const rolesMap = await this.buildRolesMap(
+      entities.map((entity) => entity.id),
+    );
+    return entities.map((entity) =>
+      this.toDomain(entity, rolesMap.get(entity.id)),
+    );
   }
 
-  private async buildRolesMap(userIds: string[]): Promise<Map<string, UserRolePrimitive | null>> {
+  async remove(userId: UserId): Promise<void> {
+    await this.ormRepo.softDelete({ id: userId.value });
+  }
+
+  private async buildRolesMap(
+    userIds: string[],
+  ): Promise<Map<string, UserRolePrimitive | null>> {
     const map = new Map<string, UserRolePrimitive | null>();
     if (!userIds.length) {
       return map;
@@ -59,7 +69,9 @@ export class TypeormUserRepository implements UserRepository {
       return map;
     }
 
-    const roleIds = Array.from(new Set(userRoles.map((userRole) => userRole.roleId)));
+    const roleIds = Array.from(
+      new Set(userRoles.map((userRole) => userRole.roleId)),
+    );
     const roles = await this.roleRepo.find({
       where: { id: In(roleIds) },
     });
@@ -73,14 +85,17 @@ export class TypeormUserRepository implements UserRepository {
       const role = roleById.get(userRole.roleId);
       map.set(userRole.userId, {
         id: userRole.roleId,
-        name: role?.name ?? "unknown",
+        name: role?.name ?? 'unknown',
       });
     }
 
     return map;
   }
 
-  private toDomain(entity: UserOrmEntity, role?: UserRolePrimitive | null): User {
+  private toDomain(
+    entity: UserOrmEntity,
+    role?: UserRolePrimitive | null,
+  ): User {
     return User.fromPrimitives({
       id: entity.id,
       firstName: entity.firstName,

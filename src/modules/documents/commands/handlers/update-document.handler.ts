@@ -17,7 +17,7 @@ export class UpdateDocumentHandler
     try {
       await this.documentRepo.updateDocument(document);
     } catch (e) {
-      const code = (e as any)?.driverError?.code;
+      const code = e?.driverError?.code;
 
       if (e instanceof QueryFailedError && code === '23505') {
         throw new ConflictException(
