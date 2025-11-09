@@ -5,9 +5,16 @@ import { ConfigModule } from './common/config/config.module';
 import { DatabaseModule } from './common/config/databases/database.module';
 import { UserModule } from './modules/users/user.module';
 import { DocumentModule } from './modules/documents/document.module';
+import { HistoryModule } from './modules/histories/history.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, UserModule, DocumentModule],
+  imports: [
+    ConfigModule,
+    DatabaseModule,
+    UserModule,
+    DocumentModule,
+    HistoryModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

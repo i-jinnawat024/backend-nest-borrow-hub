@@ -9,6 +9,7 @@ import { DocumentController } from './document.controller';
 import { GetDocumentHandler } from './queries/handlers/get-document.handler';
 import { CreateDocumentHandler } from './commands/handlers/create-document.handler';
 import { UpdateDocumentHandler } from './commands/handlers/update-document.handler';
+import { DocumentAdapter } from './adapters/document.adapter';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { UpdateDocumentHandler } from './commands/handlers/update-document.handl
     TypeOrmModule.forFeature([BorrowHistoryLogsOrmEntity, DocumentOrmEntity]),
   ],
   controllers: [DocumentController],
-  providers: [GetDocumentListHandler, DocumentRepository, GetDocumentHandler,CreateDocumentHandler,UpdateDocumentHandler],
-  exports: [],
+  providers: [GetDocumentListHandler, DocumentRepository, GetDocumentHandler,CreateDocumentHandler,UpdateDocumentHandler,DocumentAdapter],
+  exports: [DocumentAdapter],
 })
 export class DocumentModule {}
