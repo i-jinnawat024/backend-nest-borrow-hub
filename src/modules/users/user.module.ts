@@ -9,9 +9,9 @@ import { TypeormUserRepository } from "./infrastructure/persistence/typeorm/type
 import { UserOrmEntity } from "./infrastructure/persistence/typeorm/user.orm-entity";
 import { RoleOrmEntity } from "./infrastructure/persistence/typeorm/roles.orm-entity";
 import { UserRoleOrmEntity } from "./infrastructure/persistence/typeorm/user-role.orm-entity";
-import { GetUsersHandler } from "./applications/queries/handlers/get-users.handler";
+import { GetUsersListHandler } from "./applications/queries/handlers/get-users-list.handler";
 
-const queryHandlers = [GetUsersHandler];
+const queryHandlers = [GetUsersListHandler];
 
 @Module({
   imports: [
@@ -32,6 +32,6 @@ const queryHandlers = [GetUsersHandler];
       inject: [USER_REPOSITORY],
     },
   ],
-  exports: [UserDomainService],
+  exports: [UserDomainService,],
 })
 export class UserModule {}

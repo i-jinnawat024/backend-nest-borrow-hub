@@ -1,5 +1,7 @@
 import { User, UserPrimitiveProps } from "../entities/user.entity";
+import { DomainError } from "../errors/domain-error";
 import { UserRepository } from "../repositories/user.repository";
+import { UserId } from "../value-objects/user-id.vo";
 
 export interface RegisterUserCommand {
   firstName: string;
@@ -24,5 +26,13 @@ export class UserDomainService {
   async listUsers(): Promise<UserPrimitiveProps[]> {
     const users = await this.repository.findAll();
     return users.map((user) => user.toPrimitives());
+  }
+
+  async getUserById(userId: UserId): Promise<UserPrimitiveProps> {
+    const user = await this.repository.findById(userId);
+    if (!user) {
+      throw new DomainError("User not found");
+    }
+    return user.toPrimitives();
   }
 }
