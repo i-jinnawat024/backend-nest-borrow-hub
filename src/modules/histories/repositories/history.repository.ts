@@ -31,4 +31,24 @@ export class HistoryRepository extends Repository<HistoryEntity> {
       status: EHistoryStatus.BORROWED,
     });
   }
+
+  findAll() {
+    return this.repo.find();
+  }
+
+  findByStatus(status: EHistoryStatus) {
+    return this.repo.findBy({
+      status,
+    });
+  }
+  findByUserId(userId: string) {
+    return this.repo.findBy({
+      userId,
+    });
+  }
+  findByDocumentId(documentId: number) {
+    return this.repo.findBy({
+      documentId,
+    });
+  }
 }
