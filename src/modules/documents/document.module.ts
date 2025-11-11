@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BorrowHistoryLogsOrmEntity } from './entities/borrow-history-logs.entity';
 import { DocumentOrmEntity } from './entities/document.entity';
@@ -19,7 +19,7 @@ import { ReturnDocumentHandler } from './commands/handlers/return-document.handl
   imports: [
     CqrsModule,
     UserModule,
-    HistoryModule,
+    forwardRef(() => HistoryModule),
     TypeOrmModule.forFeature([BorrowHistoryLogsOrmEntity, DocumentOrmEntity]),
   ],
   controllers: [DocumentController],
@@ -29,9 +29,9 @@ import { ReturnDocumentHandler } from './commands/handlers/return-document.handl
     GetDocumentHandler,
     CreateDocumentHandler,
     UpdateDocumentHandler,
-    DocumentAdapter,
     BorrowDocumentHandler,
     ReturnDocumentHandler,
+    DocumentAdapter,
   ],
   exports: [DocumentAdapter],
 })
