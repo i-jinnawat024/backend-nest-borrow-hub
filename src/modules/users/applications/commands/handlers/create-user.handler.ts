@@ -18,7 +18,6 @@ export class CreateUserHandler
       email: command.email,
       telNumber: command.telNumber || null,
       password: command.password,
-      roleId: '694bcf06-7457-43d9-b644-2b7d1017204f',
     });
 
     return UserPresenter.toResponse(user.toPrimitives());

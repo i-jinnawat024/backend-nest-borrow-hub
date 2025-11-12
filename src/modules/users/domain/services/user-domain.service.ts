@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { User, UserPrimitiveProps } from '../entities/user.entity';
 import { DomainError } from '../errors/domain-error';
@@ -11,10 +11,8 @@ export interface RegisterUserCommand {
   firstName: string;
   lastName: string;
   email: string;
-  roleId: string;
   telNumber?: number | null;
   password: string;
-  now?: Date;
 }
 
 export interface UpdateUserCommand {
@@ -28,7 +26,10 @@ export class UserDomainService {
   ) {}
   private readonly logger = new Logger(UserDomainService.name);
   async registerUser(command: RegisterUserCommand): Promise<User> {
-    const role = await this.repository.findRoleAdmin();
+    const [totalUser,role] = await Promise.all([
+      this.repository.findAll(),
+      this.repository.findRoleAdmin(),
+    ]);
     if (!role) {
       throw new DomainError('Role not found');
     }
@@ -37,15 +38,19 @@ export class UserDomainService {
     const user = User.register({
       firstName: command.firstName,
       lastName: command.lastName,
-      now: command.now,
       email: command.email,
       telNumber: command.telNumber ?? null,
       password: hashedPassword,
       isActive: true,
     });
+    if (!user.canCreateUser(totalUser.length)) {
+      throw new BadRequestException('User limit reached');
+    }
 
-    await this.repository.save(user);
-    await this.repository.assignRole(user.id, command.roleId);
+    Promise.all([
+      this.repository.save(user),
+      this.repository.assignRole(user.id, role.id),
+    ]);
     user.setRole(role);
     return user;
   }

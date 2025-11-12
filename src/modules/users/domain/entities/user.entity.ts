@@ -111,6 +111,9 @@ export class User {
     return this.props.isActive;
   }
   
+  canCreateUser(totalUser:number): boolean {
+    return totalUser < 15;
+  }
 
   setRole(role: UserRolePrimitive | null): void {
     this.props.role = role ?? null;
