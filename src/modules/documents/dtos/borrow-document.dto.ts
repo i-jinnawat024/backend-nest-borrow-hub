@@ -1,12 +1,14 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class BorrowDocumentDto {
   @IsNotEmpty()
-  @IsNumber()
-  id: number;
+  @Type(() => Number)
+  @IsArray()
+  documentId: number[];
 
-  @IsString()
   @IsNotEmpty()
+  @IsUUID()
   userId: string;
 
   @IsOptional()

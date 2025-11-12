@@ -44,4 +44,7 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
 
     return this.repo.update(document.id, patch);
   }
+  findManyByIds(ids: number[]) {
+    return this.repo.findByIds(ids);
+  }
 }
