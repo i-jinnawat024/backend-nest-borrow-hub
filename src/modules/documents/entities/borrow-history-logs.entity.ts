@@ -1,28 +1,35 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('borrow_history_logs')
 export class BorrowHistoryLogsOrmEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({name:'document_id'})
+  @Column({ name: 'document_id' })
   documentId: string;
 
-  @Column({name:'user_id'})
+  @Column({ name: 'user_id' })
   userId: string;
 
   @Column()
-  name:string
+  name: string;
 
   @Column()
   description: string;
 
-  @CreateDateColumn({name:'created_at'})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({name:'updated_at'})
-  updatedAt!: Date; 
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
 
-  @DeleteDateColumn({name:'deleted_at'})
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
 }

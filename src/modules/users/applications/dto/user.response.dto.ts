@@ -1,10 +1,3 @@
-import { UserRolePrimitive } from "../../domain/entities/user.entity";
-
-export interface UserRoleResponseDto {
-  id: string;
-  name: string;
-}
-
 export interface UserResponseDto {
   id: string;
   firstName: string;

@@ -20,7 +20,7 @@ export class CreateDocumentHandler
       if (!result) throw new BadRequestException('Create document failed');
       return result;
     } catch (e) {
-      const code = (e as any)?.driverError?.code;
+      const code = e?.driverError?.code;
       if (e instanceof QueryFailedError && code === '23505') {
         throw new ConflictException(
           'Document already exists (document_id duplicate).',

@@ -9,9 +9,7 @@ export class CreateHistoryHandler
   implements ICommandHandler<CreateHistoryCommand>
 {
   private readonly logger = new Logger(CreateHistoryHandler.name);
-  constructor(
-    private readonly historyRepo: HistoryRepository,
-  ) {}
+  constructor(private readonly historyRepo: HistoryRepository) {}
 
   async execute(command: CreateHistoryCommand) {
     const { documentId, userId, name, description } = command;

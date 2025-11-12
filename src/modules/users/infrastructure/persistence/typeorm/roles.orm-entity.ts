@@ -5,11 +5,11 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { UserRoleOrmEntity } from "./user-role.orm-entity";
+import { UserRoleOrmEntity } from './user-role.orm-entity';
 
-@Entity({ name: "roles" })
+@Entity({ name: 'roles' })
 export class RoleOrmEntity {
   @PrimaryGeneratedColumn()
   id: string;
@@ -20,10 +20,10 @@ export class RoleOrmEntity {
   @Column()
   description: string;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @DeleteDateColumn({ name: "deleted_at" })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
 
   @OneToMany(() => UserRoleOrmEntity, (userRole) => userRole.role)

@@ -1,5 +1,5 @@
-import { UserId } from "../value-objects/user-id.vo";
-import { UserName } from "../value-objects/user-name.vo";
+import { UserId } from '../value-objects/user-id.vo';
+import { UserName } from '../value-objects/user-name.vo';
 
 export interface UserRolePrimitive {
   id: string;

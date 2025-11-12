@@ -1,4 +1,4 @@
 export enum EHistoryStatus {
-    BORROWED = 'BORROWED',
-    RETURNED = 'RETURNED',
+  BORROWED = 'BORROWED',
+  RETURNED = 'RETURNED',
 }
