@@ -21,6 +21,24 @@ export class UserOrmEntity {
   @Column({ name: 'last_name' })
   lastName: string;
 
+  @Column()
+  email: string;
+
+  @Column({
+    name: 'tel_number',
+    type: 'numeric',
+    precision: 15,
+    scale: 0,
+    nullable: true,
+  })
+  telNumber: number | null;
+
+  @Column()
+  password: string;
+
+  @Column()
+  isActive: boolean;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 

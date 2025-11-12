@@ -15,6 +15,10 @@ export class CreateUserHandler
     const user = await this.userDomainService.registerUser({
       firstName: command.firstName,
       lastName: command.lastName,
+      email: command.email,
+      telNumber: command.telNumber || null,
+      password: command.password,
+      roleId: '694bcf06-7457-43d9-b644-2b7d1017204f',
     });
 
     return UserPresenter.toResponse(user.toPrimitives());

@@ -1,12 +1,19 @@
 import { Logger } from '@nestjs/common';
+import { hash } from 'bcrypt';
 import { User, UserPrimitiveProps } from '../entities/user.entity';
 import { DomainError } from '../errors/domain-error';
 import { UserRepository } from '../repositories/user.repository';
 import { UserId } from '../value-objects/user-id.vo';
 
+const DEFAULT_SALT_ROUNDS = 10;
+
 export interface RegisterUserCommand {
   firstName: string;
   lastName: string;
+  email: string;
+  roleId: string;
+  telNumber?: number | null;
+  password: string;
   now?: Date;
 }
 
@@ -17,16 +24,29 @@ export interface UpdateUserCommand {
 }
 
 export class UserDomainService {
-  constructor(private readonly repository: UserRepository) {}
+  constructor(private readonly repository: UserRepository,
+  ) {}
   private readonly logger = new Logger(UserDomainService.name);
   async registerUser(command: RegisterUserCommand): Promise<User> {
+    const role = await this.repository.findRoleAdmin();
+    if (!role) {
+      throw new DomainError('Role not found');
+    }
+
+    const hashedPassword = await this.hashPassword(command.password);
     const user = User.register({
       firstName: command.firstName,
       lastName: command.lastName,
       now: command.now,
+      email: command.email,
+      telNumber: command.telNumber ?? null,
+      password: hashedPassword,
+      isActive: true,
     });
 
     await this.repository.save(user);
+    await this.repository.assignRole(user.id, command.roleId);
+    user.setRole(role);
     return user;
   }
 
@@ -75,5 +95,9 @@ export class UserDomainService {
     }
 
     await this.repository.remove(userId);
+  }
+
+  private hashPassword(password: string): Promise<string> {
+    return hash(password, DEFAULT_SALT_ROUNDS);
   }
 }
