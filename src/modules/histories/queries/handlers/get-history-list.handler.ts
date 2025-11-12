@@ -11,8 +11,10 @@ export class GetHistoryListHandler
   constructor(private readonly historyRepo: HistoryRepository) {}
 
   async execute(query: GetHistoryListQuery) {
-    if (query.query.status)
+    if (query.query.status){
       return await this.historyRepo.findByStatus(query.query.status);
-    return this.historyRepo.findAll();
+    }
+    const result = await this.historyRepo.findAll()
+    return result
   }
 }
