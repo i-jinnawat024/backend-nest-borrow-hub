@@ -13,6 +13,15 @@ export class GetUsersListHandler
 
   async execute(): Promise<UserResponseDto[]> {
     const users = await this.userDomainService.listUsers();
-    return users.map((user) => UserPresenter.toResponse(user));
+    const result = users.map((user) => UserPresenter.toResponse(user));
+    return result.sort((a,b)=>{
+      if(a.isActive && !b.isActive){
+        return -1;
+      }
+      if(!a.isActive && b.isActive){
+        return 1;
+      }
+      return 0;
+    });
   }
 }

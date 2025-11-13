@@ -15,8 +15,11 @@ export class CreateUserHandler
     const user = await this.userDomainService.registerUser({
       firstName: command.firstName,
       lastName: command.lastName,
+      email: command.email,
+      telNumber: command.telNumber || null,
+      password: command.password,
     });
-
+    
     return UserPresenter.toResponse(user.toPrimitives());
   }
 }
