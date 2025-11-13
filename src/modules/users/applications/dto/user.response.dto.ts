@@ -5,10 +5,10 @@ export interface UserResponseDto {
     // createdAt: string | null;
     // updatedAt: string | null;
     // deletedAt: string | null;
-  role: string | null;
+  // role: string | null;
   email: string;
   telNumber: number | null;
-  password: string;
+  // password: string;
   isActive: boolean;
 }
 

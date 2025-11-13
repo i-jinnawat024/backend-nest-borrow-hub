@@ -13,10 +13,10 @@ export class UserPresenter {
       // createdAt: this.formatDate(user.createdAt),
       // updatedAt: this.formatDate(user.updatedAt),
       // deletedAt: this.formatDate(user.deletedAt),
-      role: this.mapRole(user.role),
+      // role: this.mapRole(user.role),
       email: user.email,
       telNumber: user.telNumber,
-      password: user.password,
+      // password: user.password,
       isActive: user.isActive,
     };
   }

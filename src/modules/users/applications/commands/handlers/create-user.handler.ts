@@ -19,7 +19,7 @@ export class CreateUserHandler
       telNumber: command.telNumber || null,
       password: command.password,
     });
-
+    
     return UserPresenter.toResponse(user.toPrimitives());
   }
 }
