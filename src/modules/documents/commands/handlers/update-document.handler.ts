@@ -12,12 +12,13 @@ export class UpdateDocumentHandler
   private readonly logger = new Logger(UpdateDocumentHandler.name);
   constructor(private readonly documentRepo: DocumentRepository) {}
 
-  async execute(command: UpdateDocumentCommand): Promise<void> {
+  async execute(command: UpdateDocumentCommand): Promise<{ success: boolean }> {
     const { document } = command;
     try {
       await this.documentRepo.updateDocument(document);
+      return { success: true };
     } catch (e) {
-      const code = (e as any)?.driverError?.code;
+      const code = e?.driverError?.code;
 
       if (e instanceof QueryFailedError && code === '23505') {
         throw new ConflictException(

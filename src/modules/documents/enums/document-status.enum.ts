@@ -1,4 +1,4 @@
-export enum  EDocumentStatus {
+export enum EDocumentStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   BORROWED = 'BORROWED',

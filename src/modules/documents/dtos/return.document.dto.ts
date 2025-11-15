@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class ReturnDocumentDto {
-    @IsNotEmpty()
-    @IsNumber()
-    id: number;
+  @IsNotEmpty()
+   @Type(() => Number)
+   @IsArray()
+   documentIds: number[];
 
-    @IsNotEmpty()
-    @IsString()
-    userId: string;
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
 }

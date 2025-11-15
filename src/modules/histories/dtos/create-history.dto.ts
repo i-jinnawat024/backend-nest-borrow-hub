@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreateHistoryDto{
-    @IsNumber()
-    @IsNotEmpty()
-    id: number;
+export class CreateHistoryDto {
+  @IsNumber()
+  @IsNotEmpty()
+  id: number;
 
-    @IsString()
-    @IsOptional()
-    description:string
+  @IsString()
+  @IsOptional()
+  description: string;
 
-    @IsString()
-    @IsNotEmpty()
-    userId:string
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }

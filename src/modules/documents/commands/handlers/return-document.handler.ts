@@ -12,14 +12,18 @@ export class ReturnDocumentHandler
     private readonly documentRepo: DocumentRepository,
     private readonly historyAdapter: HistoryAdapter,
   ) {}
-
   async execute(command: ReturnDocumentCommand): Promise<void> {
-    const { body } = command;
+    const { documentIds, userId } = command.body;
 
-    await this.historyAdapter.updateDocumentHistory(body.id, body.userId);
-    await this.documentRepo.updateDocument({
-      id: body.id,
-      status: EDocumentStatus.ACTIVE,
-    });
+    for (const id of documentIds) {
+      // อัปเดตประวัติตามแต่ละเล่ม
+      await this.historyAdapter.updateDocumentHistory(id, userId);
+
+      // เปลี่ยนสถานะเอกสารให้ ACTIVE
+      await this.documentRepo.updateDocument({
+        id,
+        status: EDocumentStatus.ACTIVE,
+      });
+    }
   }
 }

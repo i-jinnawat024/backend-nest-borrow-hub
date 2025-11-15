@@ -1,5 +1,8 @@
-import { UserPrimitiveProps, UserRolePrimitive } from "../../domain/entities/user.entity";
-import { UserResponseDto, UserRoleResponseDto } from "../dto/user.response.dto";
+import {
+  UserPrimitiveProps,
+  UserRolePrimitive,
+} from '../../domain/entities/user.entity';
+import { UserResponseDto } from '../dto/user.response.dto';
 
 export class UserPresenter {
   static toResponse(user: UserPrimitiveProps): UserResponseDto {
@@ -7,10 +10,14 @@ export class UserPresenter {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
-      createdAt: this.formatDate(user.createdAt),
-      updatedAt: this.formatDate(user.updatedAt),
-      deletedAt: this.formatDate(user.deletedAt),
-      role: this.mapRole(user.role),
+      // createdAt: this.formatDate(user.createdAt),
+      // updatedAt: this.formatDate(user.updatedAt),
+      // deletedAt: this.formatDate(user.deletedAt),
+      // role: this.mapRole(user.role),
+      email: user.email,
+      telNumber: user.telNumber,
+      // password: user.password,
+      isActive: user.isActive,
     };
   }
 
@@ -19,9 +26,8 @@ export class UserPresenter {
       return null;
     }
 
-    return role.name
+    return role.name;
   }
-  
 
   private static formatDate(value?: Date | string | null): string | null {
     if (!value) {
