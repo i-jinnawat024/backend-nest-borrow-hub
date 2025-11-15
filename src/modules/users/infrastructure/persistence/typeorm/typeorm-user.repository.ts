@@ -100,6 +100,10 @@ export class TypeormUserRepository implements UserRepository {
     );
   }
 
+  count(): Promise<number> {
+    return this.ormRepo.count();
+  }
+
   async remove(userId: UserId): Promise<void> {
     await this.ormRepo.softDelete({ id: userId.value });
   }
@@ -159,6 +163,7 @@ export class TypeormUserRepository implements UserRepository {
       telNumber: entity.telNumber,
       password: entity.password,
       isActive: entity.isActive,
+      createdAt: entity.createdAt,
     });
   }
 
