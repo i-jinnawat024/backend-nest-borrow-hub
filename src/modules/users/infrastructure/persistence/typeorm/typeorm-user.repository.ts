@@ -74,6 +74,18 @@ export class TypeormUserRepository implements UserRepository {
     return this.toDomain(entity, rolesMap.get(entity.id));
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    const entity = await this.ormRepo.findOne({
+      where: { email },
+    });
+    if (!entity) {
+      return null;
+    }
+
+    const rolesMap = await this.buildRolesMap([entity.id]);
+    return this.toDomain(entity, rolesMap.get(entity.id));
+  }
+
   async findAll(): Promise<User[]> {
     const entities = await this.ormRepo.find();
     if (!entities.length) {

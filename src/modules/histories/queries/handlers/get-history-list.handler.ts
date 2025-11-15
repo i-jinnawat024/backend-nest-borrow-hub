@@ -25,6 +25,7 @@ export class GetHistoryListHandler
         const document = await this.getDocument(r.documentId);
         return {
           id: r.id,
+          userId: r.userId,
           name: r.name,
           description: r.description,
           document,
