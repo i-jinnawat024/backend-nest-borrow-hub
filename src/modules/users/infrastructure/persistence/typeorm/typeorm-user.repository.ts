@@ -163,6 +163,7 @@ export class TypeormUserRepository implements UserRepository {
       telNumber: entity.telNumber,
       password: entity.password,
       isActive: entity.isActive,
+      createdAt: entity.createdAt,
     });
   }
 

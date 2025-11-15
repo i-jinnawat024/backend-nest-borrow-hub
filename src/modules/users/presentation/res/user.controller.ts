@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseArrayPipe,
   ParseUUIDPipe,
   Patch,
   Post,
@@ -20,6 +21,7 @@ import { UpdateUserCommand } from '../../applications/commands/impl/update-user.
 import { DeleteUserCommand } from '../../applications/commands/impl/delete-user.command';
 import { GetUserQuery } from '../../applications/queries/impl/get-user.query';
 import { GetUsersListQuery } from '../../applications/queries/impl/get-users-list.query';
+import { CreateUsersBulkCommand } from '../../applications/commands/impl/create-users-bulk.command';
 
 @Controller('users')
 export class UserController {
@@ -44,14 +46,23 @@ export class UserController {
   async create(@Body() body: CreateUserDto): Promise<UserResponseDto> {
     const { firstName, lastName, email, telNumber, password } = body;
     return this.commandBus.execute(
-      new CreateUserCommand(
-        firstName,
-        lastName,
-        email,
-        password,
-        telNumber,
-      ),
+      new CreateUserCommand(firstName, lastName, email, password, telNumber),
     );
+  }
+
+  @Post('bulk')
+  async createBulk(
+    @Body()
+    body: CreateUserDto[],
+  ): Promise<UserResponseDto[]> {
+    const payload = body.map((user) => ({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      telNumber: user.telNumber ?? null,
+    }));
+    return this.commandBus.execute(new CreateUsersBulkCommand(payload));
   }
 
   @Patch(':id')

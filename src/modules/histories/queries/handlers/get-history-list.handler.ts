@@ -29,8 +29,10 @@ export class GetHistoryListHandler
           name: r.name,
           description: r.description,
           document,
+          status: r.status,
           createdAt: r.createdAt,
           updatedAt: r.updatedAt
+
         };
       }),
     );
