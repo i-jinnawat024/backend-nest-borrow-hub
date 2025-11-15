@@ -8,7 +8,6 @@ import {
 import { Request, Response } from 'express';
 import { IErrorResponse } from './interfaces/error-interface';
 
-
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   logger = new Logger('Exception');
