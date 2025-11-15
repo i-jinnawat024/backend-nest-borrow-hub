@@ -36,11 +36,11 @@ export class GetHistoryListHandler
     );
   }
   async execute(query: GetHistoryListQuery) {
-    if (query.query.status) {
+    if (query.query?.status) {
       return this.tranformData(
         await this.historyRepo.findByStatus(query.query.status),
       );
     }
-    this.tranformData(await this.historyRepo.findAll());
+    return this.tranformData(await this.historyRepo.findAll());
   }
 }

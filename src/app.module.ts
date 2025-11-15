@@ -7,6 +7,7 @@ import { UserModule } from './modules/users/user.module';
 import { DocumentModule } from './modules/documents/document.module';
 import { HistoryModule } from './modules/histories/history.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
     DocumentModule,
     HistoryModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -60,6 +60,10 @@ export class UserDomainService {
     return users.map((user) => user.toPrimitives());
   }
 
+  getUsersCount(): Promise<number> {
+    return this.repository.count();
+  }
+
   async getUserById(userId: UserId): Promise<UserPrimitiveProps> {
     const user = await this.repository.findById(userId);
     if (!user) {
