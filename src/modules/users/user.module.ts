@@ -14,11 +14,13 @@ import { RoleOrmEntity } from './infrastructure/persistence/typeorm/roles.orm-en
 import { UserRoleOrmEntity } from './infrastructure/persistence/typeorm/user-role.orm-entity';
 import { GetUsersListHandler } from './applications/queries/handlers/get-users-list.handler';
 import { GetUserHandler } from './applications/queries/handlers/get-user.handler';
+import { GetUsersCountHandler } from './applications/queries/handlers/get-users-count.handler';
 import { CreateUserHandler } from './applications/commands/handlers/create-user.handler';
 import { UpdateUserHandler } from './applications/commands/handlers/update-user.handler';
 import { DeleteUserHandler } from './applications/commands/handlers/delete-user.handler';
+import { UserAdapter } from './adapters/user.adapter';
 
-const queryHandlers = [GetUsersListHandler, GetUserHandler];
+const queryHandlers = [GetUsersListHandler, GetUserHandler, GetUsersCountHandler];
 const commandHandlers = [
   CreateUserHandler,
   UpdateUserHandler,
@@ -35,6 +37,7 @@ const commandHandlers = [
     TypeormUserRepository,
     ...queryHandlers,
     ...commandHandlers,
+    UserAdapter,
     {
       provide: USER_REPOSITORY,
       useExisting: TypeormUserRepository,
@@ -46,6 +49,6 @@ const commandHandlers = [
       inject: [USER_REPOSITORY],
     },
   ],
-  exports: [UserDomainService],
+  exports: [UserDomainService, UserAdapter],
 })
 export class UserModule {}
