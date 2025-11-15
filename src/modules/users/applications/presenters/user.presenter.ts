@@ -13,7 +13,7 @@ export class UserPresenter {
       createdAt: user.createdAt!,
       // updatedAt: this.formatDate(user.updatedAt),
       // deletedAt: this.formatDate(user.deletedAt),
-      // role: this.mapRole(user.role),
+      role: this.mapRole(user.role),
       email: user.email,
       telNumber: user.telNumber,
       // password: user.password,
