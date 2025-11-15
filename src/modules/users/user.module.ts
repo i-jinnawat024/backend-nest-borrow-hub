@@ -18,11 +18,13 @@ import { GetUsersCountHandler } from './applications/queries/handlers/get-users-
 import { CreateUserHandler } from './applications/commands/handlers/create-user.handler';
 import { UpdateUserHandler } from './applications/commands/handlers/update-user.handler';
 import { DeleteUserHandler } from './applications/commands/handlers/delete-user.handler';
+import { CreateUsersBulkHandler } from './applications/commands/handlers/create-users-bulk.handler';
 import { UserAdapter } from './adapters/user.adapter';
 
 const queryHandlers = [GetUsersListHandler, GetUserHandler, GetUsersCountHandler];
 const commandHandlers = [
   CreateUserHandler,
+  CreateUsersBulkHandler,
   UpdateUserHandler,
   DeleteUserHandler,
 ];

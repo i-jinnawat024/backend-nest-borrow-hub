@@ -10,7 +10,7 @@ export class UserPresenter {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
-      // createdAt: this.formatDate(user.createdAt),
+      createdAt: user.createdAt!,
       // updatedAt: this.formatDate(user.updatedAt),
       // deletedAt: this.formatDate(user.deletedAt),
       // role: this.mapRole(user.role),

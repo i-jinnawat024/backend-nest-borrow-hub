@@ -10,9 +10,17 @@ export class GetDocumentListHandler
 
   async execute(query: GetDocumentListQuery) {
     const result = await this.documentRepo.findAll();
+
     return result.sort((a, b) => {
-      if (a.status === 'INACTIVE' && b.status !== 'INACTIVE') return 1;
-      if (a.status !== 'INACTIVE' && b.status === 'INACTIVE') return -1;
+      const aPriority = a.status === 'INACTIVE' ? 1 : 0;
+      const bPriority = b.status === 'INACTIVE' ? 1 : 0;
+
+      // 1️⃣ Sort INACTIVE ไปท้าย
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+      }
+
+      // 2️⃣ Sort by createdAt descending
       return b.createdAt.getTime() - a.createdAt.getTime();
     });
   }

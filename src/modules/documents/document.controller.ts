@@ -39,7 +39,7 @@ export class DocumentController {
   }
 
   @Post()
-  createDocument(@Body() body: CreateDocumentDto) {
+  createDocument(@Body() body: CreateDocumentDto[]) {
     return this.commandBus.execute(new CreateDocumentCommand(body));
   }
   @Put()
