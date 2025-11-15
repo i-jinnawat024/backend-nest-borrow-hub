@@ -1,5 +1,5 @@
 import { BadRequestException, Logger } from '@nestjs/common';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { User, UserPrimitiveProps } from '../entities/user.entity';
 import { DomainError } from '../errors/domain-error';
 import { UserRepository } from '../repositories/user.repository';
@@ -104,5 +104,34 @@ export class UserDomainService {
 
   private hashPassword(password: string): Promise<string> {
     return hash(password, DEFAULT_SALT_ROUNDS);
+  }
+
+  async validateUserCredentials(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    const user = await this.repository.findByEmail(email);
+    if (!user) {
+      throw new DomainError('Invalid credentials');
+    }
+
+    const primitives = user.toPrimitives();
+    const isPasswordMatch = await this.comparePassword(
+      password,
+      primitives.password,
+    );
+    if (!isPasswordMatch) {
+      throw new DomainError('Invalid credentials');
+    }
+
+    if (!user.isActive) {
+      throw new DomainError('Inactive account');
+    }
+
+    return user;
+  }
+
+  private comparePassword(plain: string, hashed: string): Promise<boolean> {
+    return compare(plain, hashed);
   }
 }
