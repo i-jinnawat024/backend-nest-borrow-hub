@@ -134,6 +134,11 @@ export class User {
     this.touch();
   }
 
+  changePassword(hashedPassword: string): void {
+    this.props.password = hashedPassword;
+    this.touch();
+  }
+
   private touch(): void {
     // this.props.updatedAt = new Date();
   }
