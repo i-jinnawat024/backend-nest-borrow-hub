@@ -10,6 +10,7 @@ export function configureApp(app: INestApplication): void {
      env === 'production'
        ? process.env.CORS_ORIGIN_PROD
        : process.env.CORS_ORIGIN_DEV;
+
    app.setGlobalPrefix('api');
     app.enableCors({
     origin: [rawOrigins, 'http://localhost:4200'],
@@ -17,6 +18,7 @@ export function configureApp(app: INestApplication): void {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
+
  
   app.useGlobalPipes(
     new ValidationPipe({
