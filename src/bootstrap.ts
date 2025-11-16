@@ -9,17 +9,13 @@ export function configureApp(app: INestApplication): void {
      env === 'production'
        ? process.env.CORS_ORIGIN_PROD
        : process.env.CORS_ORIGIN_DEV;
-   const corsOrigins = (rawOrigins ?? '')
-     .split(',')
-     .map((o) => o.trim())
-     .filter(Boolean);
    app.setGlobalPrefix('api');
-   app.enableCors({
-     origin: corsOrigins,
-     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-     allowedHeaders: ['Content-Type', 'Authorization'],
-     credentials: true,
-   });
+    app.enableCors({
+    origin: [rawOrigins, 'http://localhost:4200'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
  
   app.useGlobalPipes(
     new ValidationPipe({

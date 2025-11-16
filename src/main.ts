@@ -12,14 +12,11 @@ async function bootstrap() {
     env === 'production'
       ? process.env.CORS_ORIGIN_PROD
       : process.env.CORS_ORIGIN_DEV;
-  const corsOrigins = (rawOrigins ?? '')
-    .split(',')
-    .map((o) => o.trim())
-    .filter(Boolean);
+
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: corsOrigins,
+    origin: [rawOrigins, 'http://localhost:4200'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
