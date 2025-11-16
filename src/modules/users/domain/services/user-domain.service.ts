@@ -20,6 +20,8 @@ export interface UpdateUserCommand {
   id: string;
   firstName?: string;
   lastName?: string;
+  email?: string;
+  password?: string;
 }
 
 export class UserDomainService {
@@ -141,6 +143,15 @@ export class UserDomainService {
 
     if (hasLastName) {
       user.changeLastName(command.lastName as string);
+    }
+
+    if (command.email) {
+      user.changeEmail(command.email);
+    }
+
+    if (command.password) {
+      const hashedPassword = await this.hashPassword(command.password);
+      user.changePassword(hashedPassword);
     }
 
     await this.repository.save(user);

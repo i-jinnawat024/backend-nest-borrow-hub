@@ -16,6 +16,8 @@ export class UpdateUserHandler
       id: command.id,
       firstName: command.firstName,
       lastName: command.lastName,
+      email: command.email,
+      password: command.password,
     });
 
     return UserPresenter.toResponse(updated);

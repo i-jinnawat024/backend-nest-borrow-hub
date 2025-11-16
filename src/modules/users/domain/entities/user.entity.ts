@@ -140,6 +140,11 @@ export class User {
     this.touch();
   }
 
+  changeEmail(email: string): void {
+    this.props.email = UserEmail.create(email).value;
+    this.touch();
+  }
+  
   private touch(): void {
     // this.props.updatedAt = new Date();
   }
