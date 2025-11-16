@@ -51,4 +51,16 @@ export class HistoryRepository extends Repository<HistoryEntity> {
       documentId,
     });
   }
+
+  countMonthlyTransactions(year: number, month: number) {
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 1);
+
+    return this.repo
+      .createQueryBuilder('history')
+      .where('history.created_at >= :start', { start: startDate })
+      .andWhere('history.created_at < :end', { end: endDate })
+      .andWhere('history.deleted_at IS NULL')
+      .getCount();
+  }
 }

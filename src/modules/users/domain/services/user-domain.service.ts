@@ -1,12 +1,12 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
+import { FREEMIUM_CONTACT_MESSAGE, FREEMIUM_LIMITS } from 'src/common/constants/freemium.constant';
 import { User, UserPrimitiveProps } from '../entities/user.entity';
 import { DomainError } from '../errors/domain-error';
 import { UserRepository } from '../repositories/user.repository';
 import { UserId } from '../value-objects/user-id.vo';
 
 const DEFAULT_SALT_ROUNDS = 10;
-const MAX_USERS_LIMIT = 15;
 
 export interface RegisterUserCommand {
   firstName: string;
@@ -44,8 +44,8 @@ export class UserDomainService {
       password: hashedPassword,
       isActive: true,
     });
-    if (!user.canCreateUser(totalUser.length)) {
-      throw new BadRequestException('User limit reached');
+    if (!user.canCreateUser(totalUser.length, FREEMIUM_LIMITS.MAX_USERS)) {
+      throw new BadRequestException(FREEMIUM_CONTACT_MESSAGE);
     }
 
     Promise.all([
@@ -70,8 +70,11 @@ export class UserDomainService {
       throw new DomainError('Role not found');
     }
 
-    if (existingUsers.length + commands.length > MAX_USERS_LIMIT) {
-      throw new BadRequestException('User limit reached');
+    if (
+      existingUsers.length + commands.length >
+      FREEMIUM_LIMITS.MAX_USERS
+    ) {
+      throw new BadRequestException(FREEMIUM_CONTACT_MESSAGE);
     }
 
     const users = await Promise.all(

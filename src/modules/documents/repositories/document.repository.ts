@@ -48,7 +48,11 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
     return this.repo.findByIds(ids);
   }
   async insertBulk(documents: DocumentOrmEntity[]) {
-  return this.repo.insert(documents);
-}
+    return this.repo.insert(documents);
+  }
+
+  countDocuments() {
+    return this.repo.count();
+  }
 
 }
