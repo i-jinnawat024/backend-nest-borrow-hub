@@ -1,3 +1,4 @@
+import { FREEMIUM_LIMITS } from 'src/common/constants/freemium.constant';
 import { UserEmail } from '../value-objects/user-email.vo';
 import { UserId } from '../value-objects/user-id.vo';
 import { UserName } from '../value-objects/user-name.vo';
@@ -115,8 +116,8 @@ export class User {
     return this.props.isActive;
   }
   
-  canCreateUser(totalUser:number): boolean {
-    return totalUser < 15;
+  canCreateUser(totalUser: number, limit = FREEMIUM_LIMITS.MAX_USERS): boolean {
+    return totalUser < limit;
   }
 
   setRole(role: UserRolePrimitive | null): void {

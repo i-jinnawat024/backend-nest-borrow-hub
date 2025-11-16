@@ -1,0 +1,7 @@
+export const FREEMIUM_LIMITS = {
+  MAX_USERS: 20,
+  MAX_MONTHLY_BORROW_TRANSACTIONS: 1000,
+  MAX_DOCUMENT_RECORDS: 8000,
+} as const;
+
+export const FREEMIUM_CONTACT_MESSAGE = 'ให้ติดต่อผู้พัฒนาระบบ';
