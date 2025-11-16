@@ -1,6 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { HttpExceptionFilter } from './common/shared/filters/http-exception.filter';
+import { ResponseTransformInterceptor } from './common/shared/interceptors/response-transform.interceptor';
 
 export function configureApp(app: INestApplication): void {
   app.setGlobalPrefix('api');
@@ -25,5 +26,6 @@ export function configureApp(app: INestApplication): void {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+  app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 }
