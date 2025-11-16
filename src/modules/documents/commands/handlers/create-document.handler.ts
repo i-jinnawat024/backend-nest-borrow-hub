@@ -5,6 +5,10 @@ import { DocumentOrmEntity } from '../../entities/document.entity';
 import { BadRequestException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
+import {
+  FREEMIUM_CONTACT_MESSAGE,
+  FREEMIUM_LIMITS,
+} from 'src/common/constants/freemium.constant';
 @CommandHandler(CreateDocumentCommand)
 export class CreateDocumentHandler
   implements ICommandHandler<CreateDocumentCommand>
@@ -13,6 +17,14 @@ export class CreateDocumentHandler
 
   async execute(command: CreateDocumentCommand) {
     const { documents } = command;
+
+    const totalDocuments = await this.documentRepo.countDocuments();
+    if (
+      totalDocuments + documents.length >
+      FREEMIUM_LIMITS.MAX_DOCUMENT_RECORDS
+    ) {
+      throw new BadRequestException(FREEMIUM_CONTACT_MESSAGE);
+    }
 
     const entities = documents.map((doc) => {
       const obj = new DocumentOrmEntity();

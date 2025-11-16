@@ -5,7 +5,7 @@ export interface UserResponseDto {
   createdAt: Date | null;
   // updatedAt: string | null;
   // deletedAt: string | null;
-  // role: string | null;
+  role: string | null;
   email: string;
   telNumber: number | null;
   // password: string;

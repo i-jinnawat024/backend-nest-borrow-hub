@@ -10,6 +10,10 @@ import { BorrowDocumentDto } from '../../dtos/borrow-document.dto';
 import { EDocumentStatus } from '../../enums/document-status.enum';
 import { DocumentRepository } from '../../repositories/document.repository';
 import { HistoryAdapter } from 'src/modules/histories/adapters/history.adapter';
+import {
+  FREEMIUM_CONTACT_MESSAGE,
+  FREEMIUM_LIMITS,
+} from 'src/common/constants/freemium.constant';
 
 @CommandHandler(BorrowDocumentCommand)
 export class BorrowDocumentHandler
@@ -63,16 +67,19 @@ export class BorrowDocumentHandler
       ),
     );
 
-    await Promise.all(
-      documentList.map((document) =>
-        this.documentRepo.updateDocument({
-          id: document.id,
-          documentId: document.documentId,
-          status: EDocumentStatus.BORROWED,
-          updatedAt: undefined,
-        }),
-      ),
-    );
+    const now = new Date();
+    const monthlyTransactions =
+      await this.historyAdapter.getMonthlyTransactionCount(
+        now.getFullYear(),
+        now.getMonth(),
+      );
+
+    if (
+      monthlyTransactions + payloads.length >
+      FREEMIUM_LIMITS.MAX_MONTHLY_BORROW_TRANSACTIONS
+    ) {
+      throw new BadRequestException(FREEMIUM_CONTACT_MESSAGE);
+    }
 
     await Promise.all(
       payloads.map((payload) =>
@@ -82,6 +89,17 @@ export class BorrowDocumentHandler
           payload.name,
           payload.description,
         ),
+      ),
+    );
+
+    await Promise.all(
+      documentList.map((document) =>
+        this.documentRepo.updateDocument({
+          id: document.id,
+          documentId: document.documentId,
+          status: EDocumentStatus.BORROWED,
+          updatedAt: undefined,
+        }),
       ),
     );
 
