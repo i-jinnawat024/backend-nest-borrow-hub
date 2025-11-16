@@ -12,6 +12,7 @@ async function bootstrap() {
     env === 'production'
       ? process.env.CORS_ORIGIN_PROD
       : process.env.CORS_ORIGIN_DEV;
+
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors({

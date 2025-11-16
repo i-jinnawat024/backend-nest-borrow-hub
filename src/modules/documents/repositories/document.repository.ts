@@ -47,4 +47,8 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
   findManyByIds(ids: number[]) {
     return this.repo.findByIds(ids);
   }
+  async insertBulk(documents: DocumentOrmEntity[]) {
+  return this.repo.insert(documents);
+}
+
 }

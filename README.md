@@ -61,7 +61,8 @@ $ pnpm run test:cov
 
 - Set `JWT_SECRET` and, optionally, `JWT_EXPIRES_IN` (number of seconds, defaults to `3600`) in your `.env`.
 - Call `POST /api/auth/login` with a JSON body `{ "email": "user@example.com", "password": "secret" }`.
-- The endpoint returns a bearer `accessToken`, its expiry window, and the sanitized user profile needed by the frontend.
+- Call `POST /api/auth/reset-password` with `{ "email": "user@example.com", "currentPassword": "old-pass", "newPassword": "new-pass" }` to change passwords after verifying the old hash stored in the database.
+- Both endpoints respond with sanitized user info, while the login route also returns a bearer `accessToken` and expiry window for the frontend.
 
 ## Deployment
 
