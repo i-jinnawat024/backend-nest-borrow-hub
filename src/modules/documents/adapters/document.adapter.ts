@@ -4,6 +4,7 @@ import { UpdateDocumentCommand } from '../commands/impl/update-document.command'
 import { UpdateDocumentDto } from '../dtos/update-document.dto';
 import { GetDocumentQuery } from '../queries/impl/get-documnet.query';
 import { DocumentOrmEntity } from '../entities/document.entity';
+import { GetDocumentListQuery } from '../queries/impl/get-document-list.query';
 
 @Injectable()
 export class DocumentAdapter {
@@ -18,5 +19,9 @@ export class DocumentAdapter {
 
   async getDocumentById(id: number): Promise<DocumentOrmEntity> {
     return this.queryBus.execute(new GetDocumentQuery(id));
+  }
+
+  async getDocumentList() {
+    return this.queryBus.execute(new GetDocumentListQuery());
   }
 }
