@@ -10,6 +10,7 @@ import { HistoryController } from './history.controller';
 import { GetHistoryDocumentHandler } from './queries/handlers/get-history-document.handler';
 import { GetHistoryListHandler } from './queries/handlers/get-history-list.handler';
 import { GetHistoryUserHandler } from './queries/handlers/get-history-user.handler';
+import { GetMonthlyTransactionCountHandler } from './queries/handlers/get-monthly-transaction-count.handler';
 import { HistoryRepository } from './repositories/history.repository';
 import { UserModule } from '../users/user.module';
 import { DocumentModule } from '../documents/document.module';
@@ -30,6 +31,7 @@ import { DocumentModule } from '../documents/document.module';
     GetHistoryListHandler,
     GetHistoryDocumentHandler,
     GetHistoryUserHandler,
+    GetMonthlyTransactionCountHandler,
   ],
   exports: [HistoryAdapter],
 })

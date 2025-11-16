@@ -25,8 +25,59 @@ export class TypeormUserRepository implements UserRepository {
     await this.ormRepo.save(entity);
   }
 
+  async assignRole(userId: UserId, roleId: string): Promise<void> {
+    const existingRole = await this.userRoleRepo.findOne({
+      where: { userId: userId.value },
+    });
+
+    if (existingRole) {
+      existingRole.roleId = roleId;
+      await this.userRoleRepo.save(existingRole);
+      return;
+    }
+
+    const userRole = this.userRoleRepo.create({
+      userId: userId.value,
+      roleId,
+    });
+    await this.userRoleRepo.save(userRole);
+  }
+
+  async findRoleAdmin():Promise<RoleOrmEntity | null>{
+    return this.roleRepo.findOne({
+      where: { name: 'admin' },
+    });
+  }
+
+  async findRoleById(roleId: string): Promise<UserRolePrimitive | null> {
+    const role = await this.roleRepo.findOne({
+      where: { id: roleId },
+    });
+
+    if (!role) {
+      return null;
+    }
+
+    return {
+      id: role.id,
+      name: role.name,
+    };
+  }
+
   async findById(userId: UserId): Promise<User | null> {
     const entity = await this.ormRepo.findOneBy({ id: userId.value });
+    if (!entity) {
+      return null;
+    }
+
+    const rolesMap = await this.buildRolesMap([entity.id]);
+    return this.toDomain(entity, rolesMap.get(entity.id));
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const entity = await this.ormRepo.findOne({
+      where: { email },
+    });
     if (!entity) {
       return null;
     }
@@ -47,6 +98,10 @@ export class TypeormUserRepository implements UserRepository {
     return entities.map((entity) =>
       this.toDomain(entity, rolesMap.get(entity.id)),
     );
+  }
+
+  count(): Promise<number> {
+    return this.ormRepo.count();
   }
 
   async remove(userId: UserId): Promise<void> {
@@ -100,10 +155,15 @@ export class TypeormUserRepository implements UserRepository {
       id: entity.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-      deletedAt: entity.deletedAt,
+      // createdAt: entity.createdAt,
+      // updatedAt: entity.updatedAt,
+      // deletedAt: entity.deletedAt,
       role: role ?? null,
+      email: entity.email,
+      telNumber: entity.telNumber,
+      password: entity.password,
+      isActive: entity.isActive,
+      createdAt: entity.createdAt,
     });
   }
 
@@ -113,9 +173,13 @@ export class TypeormUserRepository implements UserRepository {
       id: primitives.id,
       firstName: primitives.firstName,
       lastName: primitives.lastName,
-      createdAt: primitives.createdAt,
-      updatedAt: primitives.updatedAt,
-      deletedAt: primitives.deletedAt ?? null,
+      email: primitives.email,
+      telNumber: primitives.telNumber,
+      password: primitives.password,
+      isActive: primitives.isActive,
+      // createdAt: primitives.createdAt,
+      // updatedAt: primitives.updatedAt,
+      // deletedAt: primitives.deletedAt ?? null,
     };
   }
 }
