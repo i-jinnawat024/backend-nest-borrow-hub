@@ -4,12 +4,23 @@ import { HttpExceptionFilter } from './common/shared/filters/http-exception.filt
 
 export function configureApp(app: INestApplication): void {
   app.setGlobalPrefix('api');
-  app.enableCors({
-    origin: ['http://localhost:4200'], // frontend origin
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // ถ้าใช้ cookie/token
-  });
+  const env = process.env.NODE_ENV || 'development';
+   const rawOrigins =
+     env === 'production'
+       ? process.env.CORS_ORIGIN_PROD
+       : process.env.CORS_ORIGIN_DEV;
+   const corsOrigins = (rawOrigins ?? '')
+     .split(',')
+     .map((o) => o.trim())
+     .filter(Boolean);
+   app.setGlobalPrefix('api');
+   app.enableCors({
+     origin: corsOrigins,
+     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+     allowedHeaders: ['Content-Type', 'Authorization'],
+     credentials: true,
+   });
+ 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
