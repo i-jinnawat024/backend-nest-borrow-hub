@@ -5,6 +5,10 @@ import { DocumentOrmEntity } from '../../entities/document.entity';
 import { BadRequestException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
+import {
+  FREEMIUM_CONTACT_MESSAGE,
+  FREEMIUM_LIMITS,
+} from 'src/common/constants/freemium.constant';
 @CommandHandler(CreateDocumentCommand)
 export class CreateDocumentHandler
   implements ICommandHandler<CreateDocumentCommand>
@@ -12,18 +16,33 @@ export class CreateDocumentHandler
   constructor(private readonly documentRepo: DocumentRepository) {}
 
   async execute(command: CreateDocumentCommand) {
-    const { document } = command;
-    const documentOrmEntity = new DocumentOrmEntity();
-    Object.assign(documentOrmEntity, document);
+    const { documents } = command;
+
+    const totalDocuments = await this.documentRepo.countDocuments();
+    if (
+      totalDocuments + documents.length >
+      FREEMIUM_LIMITS.MAX_DOCUMENT_RECORDS
+    ) {
+      throw new BadRequestException(FREEMIUM_CONTACT_MESSAGE);
+    }
+
+    const entities = documents.map((doc) => {
+      const obj = new DocumentOrmEntity();
+      Object.assign(obj, doc);
+      return obj;
+    });
+
     try {
-      const result = await this.documentRepo.insertDocument(documentOrmEntity);
-      if (!result) throw new BadRequestException('Create document failed');
-      return result;
+      const result = await this.documentRepo.insertBulk(entities);
+      if (!result) {
+        throw new BadRequestException('Bulk create document failed');
+      }
+      return result.identifiers;
     } catch (e) {
       const code = e?.driverError?.code;
       if (e instanceof QueryFailedError && code === '23505') {
         throw new ConflictException(
-          'Document already exists (document_id duplicate).',
+          'Some documents already exist (duplicate document_id).',
         );
       }
       throw e;

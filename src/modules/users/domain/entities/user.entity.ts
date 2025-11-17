@@ -1,3 +1,4 @@
+import { FREEMIUM_LIMITS } from 'src/common/constants/freemium.constant';
 import { UserEmail } from '../value-objects/user-email.vo';
 import { UserId } from '../value-objects/user-id.vo';
 import { UserName } from '../value-objects/user-name.vo';
@@ -16,6 +17,7 @@ export interface UserPrimitiveProps {
   lastName: string;
   isActive: boolean;
   role?: UserRolePrimitive | null;
+  createdAt: Date | null;
 }
 
 interface UserProps {
@@ -27,6 +29,7 @@ interface UserProps {
   lastName: string;
   isActive: boolean;
   role?: UserRolePrimitive | null;
+  createdAt: Date | null;
 }
 
 interface RegisterUserProps {
@@ -36,14 +39,13 @@ interface RegisterUserProps {
   firstName: string;
   lastName: string;
   isActive?: boolean;
-  now?: Date;
+  createdAt?: Date;
 }
 
 export class User {
   private constructor(private props: UserProps) {}
 
   static register(props: RegisterUserProps): User {
-    const now = props.now ?? new Date();
 
     return new User({
       id: UserId.create(),
@@ -54,6 +56,7 @@ export class User {
       lastName: UserName.create(props.lastName).value,
       role: null,
       isActive: props.isActive ?? true,
+      createdAt: props.createdAt ?? null,
     });
   }
 
@@ -67,6 +70,7 @@ export class User {
       lastName: raw.lastName,
       isActive: raw.isActive,
       role: raw.role ?? null,
+      createdAt: raw.createdAt ?? null,
     });
   }
 
@@ -80,6 +84,7 @@ export class User {
       telNumber: this.props.telNumber,
       password: this.props.password,
       isActive: this.props.isActive,
+      createdAt: this.props.createdAt ?? null,
     };
   }
 
@@ -111,8 +116,8 @@ export class User {
     return this.props.isActive;
   }
   
-  canCreateUser(totalUser:number): boolean {
-    return totalUser < 15;
+  canCreateUser(totalUser: number, limit = FREEMIUM_LIMITS.MAX_USERS): boolean {
+    return totalUser < limit;
   }
 
   setRole(role: UserRolePrimitive | null): void {
@@ -130,6 +135,16 @@ export class User {
     this.touch();
   }
 
+  changePassword(hashedPassword: string): void {
+    this.props.password = hashedPassword;
+    this.touch();
+  }
+
+  changeEmail(email: string): void {
+    this.props.email = UserEmail.create(email).value;
+    this.touch();
+  }
+  
   private touch(): void {
     // this.props.updatedAt = new Date();
   }
