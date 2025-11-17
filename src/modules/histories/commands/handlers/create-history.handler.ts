@@ -4,7 +4,7 @@ import { BadRequestException, Logger } from '@nestjs/common';
 import {
   FREEMIUM_CONTACT_MESSAGE,
   FREEMIUM_LIMITS,
-} from 'src/common/constants/freemium.constant';
+} from '../../../../common/constants/freemium.constant';
 import { HistoryRepository } from '../../repositories/history.repository';
 import { EHistoryStatus } from '../../enums/history-status.enum';
 

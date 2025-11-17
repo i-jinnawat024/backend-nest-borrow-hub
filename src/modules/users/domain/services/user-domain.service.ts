@@ -1,9 +1,6 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
-import {
-  FREEMIUM_CONTACT_MESSAGE,
-  FREEMIUM_LIMITS,
-} from 'src/common/constants/freemium.constant';
+import { FREEMIUM_CONTACT_MESSAGE, FREEMIUM_LIMITS } from '../../../../common/constants/freemium.constant';
 import { User, UserPrimitiveProps } from '../entities/user.entity';
 import { DomainError } from '../errors/domain-error';
 import { UserRepository } from '../repositories/user.repository';
