@@ -25,8 +25,6 @@ export interface UpdateUserCommand {
   lastName?: string;
   email?: string;
   password?: string;
-  email?: string;
-  password?: string;
 }
 
 export class UserDomainService {
