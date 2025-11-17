@@ -7,6 +7,10 @@ import { ResponseTransformInterceptor } from './common/shared/interceptors/respo
 
 const DEV_BRANCH_NAME = 'dev';
 const DEV_BRANCH_FALLBACK_ORIGIN = 'https://dev-borrow-hub.ijinhub.com';
+const DEV_DOMAIN_HINTS = [
+  'dev-borrow-hub.ijinhub.com',
+  'api-dev-borrow.ijinhub.com',
+];
 const DEFAULT_LOCAL_ORIGINS = ['http://localhost:4200'];
 
 const normalizeOrigin = (value: string) =>
@@ -22,13 +26,26 @@ export const resolveCorsOrigins = (): CorsOptions['origin'] => {
   const env = process.env.NODE_ENV ?? 'development';
   const vercelEnv = process.env.VERCEL_ENV ?? '';
   const branch = (process.env.VERCEL_GIT_COMMIT_REF ?? '').toLowerCase();
+  const deploymentUrls = [
+    process.env.VERCEL_URL,
+    process.env.APP_DOMAIN,
+    process.env.API_DOMAIN,
+  ]
+    .filter(Boolean)
+    .map((url) => (url as string).toLowerCase());
   const devOrigin = process.env.CORS_ORIGIN_DEV ?? DEV_BRANCH_FALLBACK_ORIGIN;
   const prodOrigin = process.env.CORS_ORIGIN_PROD;
 
+  const matchesDevDomain =
+    deploymentUrls.length > 0 &&
+    deploymentUrls.some((url) =>
+      DEV_DOMAIN_HINTS.some((hint) => url.includes(hint)),
+    );
   const shouldAllowAll =
     env !== 'production' ||
     vercelEnv === 'development' ||
-    branch === DEV_BRANCH_NAME;
+    branch === DEV_BRANCH_NAME ||
+    matchesDevDomain;
 
   if (shouldAllowAll) {
     return true;
