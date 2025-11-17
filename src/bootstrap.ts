@@ -1,25 +1,77 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
+import { buildCorsOptions } from './common/config/cors.config';
 import { HttpExceptionFilter } from './common/shared/filters/http-exception.filter';
 import { ResponseTransformInterceptor } from './common/shared/interceptors/response-transform.interceptor';
 
+const DEV_BRANCH_NAME = 'dev';
+const DEV_BRANCH_FALLBACK_ORIGIN = 'https://dev-borrow-hub.ijinhub.com';
+const DEV_DOMAIN_HINTS = [
+  'dev-borrow-hub.ijinhub.com',
+  'api-dev-borrow.ijinhub.com',
+];
+const DEFAULT_LOCAL_ORIGINS = ['http://localhost:4200'];
+
+const normalizeOrigin = (value: string) =>
+  value.endsWith('/') ? value.slice(0, -1) : value;
+
+const addOriginIfPresent = (target: Set<string>, value?: string | null) => {
+  if (value) {
+    target.add(normalizeOrigin(value));
+  }
+};
+
+export const resolveCorsOrigins = (): CorsOptions['origin'] => {
+  const env = process.env.NODE_ENV ?? 'development';
+  const vercelEnv = process.env.VERCEL_ENV ?? '';
+  const branch = (process.env.VERCEL_GIT_COMMIT_REF ?? '').toLowerCase();
+  const deploymentUrls = [
+    process.env.VERCEL_URL,
+    process.env.APP_DOMAIN,
+    process.env.API_DOMAIN,
+  ]
+    .filter(Boolean)
+    .map((url) => (url as string).toLowerCase());
+  const devOrigin = process.env.CORS_ORIGIN_DEV ?? DEV_BRANCH_FALLBACK_ORIGIN;
+  const prodOrigin = process.env.CORS_ORIGIN_PROD;
+
+  const matchesDevDomain =
+    deploymentUrls.length > 0 &&
+    deploymentUrls.some((url) =>
+      DEV_DOMAIN_HINTS.some((hint) => url.includes(hint)),
+    );
+  const shouldAllowAll =
+    env !== 'production' ||
+    vercelEnv === 'development' ||
+    branch === DEV_BRANCH_NAME ||
+    matchesDevDomain;
+
+  if (shouldAllowAll) {
+    return true;
+  }
+
+  const origins = new Set<string>();
+  DEFAULT_LOCAL_ORIGINS.forEach((origin) => origins.add(origin));
+
+  if (vercelEnv === 'production') {
+    addOriginIfPresent(origins, prodOrigin);
+  } else {
+    addOriginIfPresent(origins, devOrigin);
+  }
+
+  return Array.from(origins);
+};
+
 export function configureApp(app: INestApplication): void {
   app.setGlobalPrefix('api');
-  const env = process.env.NODE_ENV || 'development';
-   const rawOrigins =
-     env === 'production'
-       ? process.env.CORS_ORIGIN_PROD
-       : process.env.CORS_ORIGIN_DEV;
-
-   app.setGlobalPrefix('api');
-    app.enableCors({
-    origin: [rawOrigins, 'http://localhost:4200'],
+  app.enableCors({
+    origin: resolveCorsOrigins(),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
- 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -28,6 +80,7 @@ export function configureApp(app: INestApplication): void {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 }
