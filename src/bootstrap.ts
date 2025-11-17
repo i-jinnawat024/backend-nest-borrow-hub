@@ -1,6 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
+import { buildCorsOptions } from './common/config/cors.config';
 import { HttpExceptionFilter } from './common/shared/filters/http-exception.filter';
 import { ResponseTransformInterceptor } from './common/shared/interceptors/response-transform.interceptor';
 
@@ -47,7 +48,6 @@ export const resolveCorsOrigins = (): CorsOptions['origin'] => {
 
 export function configureApp(app: INestApplication): void {
   app.setGlobalPrefix('api');
-
   app.enableCors({
     origin: resolveCorsOrigins(),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -63,6 +63,7 @@ export function configureApp(app: INestApplication): void {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
+
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 }
