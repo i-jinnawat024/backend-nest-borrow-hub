@@ -14,14 +14,13 @@ export class GetUsersListHandler
   async execute(): Promise<UserResponseDto[]> {
     const users = await this.userDomainService.listUsers();
     const result = users.map((user) => UserPresenter.toResponse(user));
-    return result.sort((a,b)=>{
-      if(a.isActive && !b.isActive){
-        return -1;
-      }
-      if(!a.isActive && b.isActive){
-        return 1;
-      }
-      return 0;
+    return result.sort((a, b) => {
+      // 1️⃣ เอา active ขึ้นก่อน
+      if (a.isActive && !b.isActive) return -1;
+      if (!a.isActive && b.isActive) return 1;
+
+      // 2️⃣ ถ้า active เหมือนกัน → sort createdAt (DESC)
+      return b.createdAt!.getTime() - a.createdAt!.getTime();
     });
   }
 }

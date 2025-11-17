@@ -25,6 +25,8 @@ export interface UpdateUserCommand {
   lastName?: string;
   email?: string;
   password?: string;
+  email?: string;
+  password?: string;
 }
 
 export class UserDomainService {
@@ -114,6 +116,10 @@ export class UserDomainService {
   async listUsers(): Promise<UserPrimitiveProps[]> {
     const users = await this.repository.findAll();
     return users.map((user) => user.toPrimitives());
+  }
+
+  getUsersCount(): Promise<number> {
+    return this.repository.count();
   }
 
   async getUserById(userId: UserId): Promise<UserPrimitiveProps> {

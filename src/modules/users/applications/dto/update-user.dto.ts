@@ -10,4 +10,14 @@ export class UpdateUserDto {
   @IsString()
   @MaxLength(255)
   lastName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  password?: string;  
 }

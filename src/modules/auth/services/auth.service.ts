@@ -8,10 +8,12 @@ import { ConfigService } from '@nestjs/config';
 
 import { LoginDto } from '../dto/login.dto';
 import { LoginResponseDto } from '../dto/login-response.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { UserDomainService } from '../../users/domain/services/user-domain.service';
 import { UserPresenter } from '../../users/applications/presenters/user.presenter';
 import { DomainError } from '../../users/domain/errors/domain-error';
 import { ENV_AUTH_JWT_EXPIRES_IN } from '../../../common/config/envs/auth.config.env';
+import { UserResponseDto } from '../../users/applications/dto/user.response.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +41,7 @@ export class AuthService {
         accessToken,
         tokenType: 'Bearer',
         expiresIn:
-          this.configService.get<number>(ENV_AUTH_JWT_EXPIRES_IN) ?? 3600,
+          this.configService.get<number>(ENV_AUTH_JWT_EXPIRES_IN)!,
         user: UserPresenter.toResponse(primitives),
       };
     } catch (error) {
@@ -48,6 +50,25 @@ export class AuthService {
           throw new ForbiddenException('Account is inactive');
         }
         throw new UnauthorizedException('Invalid email or password');
+      }
+
+      throw error;
+    }
+  }
+
+  async resetPassword(
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<UserResponseDto> {
+    try {
+      const user = await this.userDomainService.resetPassword(
+        resetPasswordDto.email,
+        resetPasswordDto.currentPassword,
+        resetPasswordDto.newPassword,
+      );
+      return UserPresenter.toResponse(user.toPrimitives());
+    } catch (error) {
+      if (error instanceof DomainError) {
+        throw new UnauthorizedException('Invalid credentials');
       }
 
       throw error;
