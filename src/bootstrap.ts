@@ -1,4 +1,5 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 import { HttpExceptionFilter } from './common/shared/filters/http-exception.filter';
 import { ResponseTransformInterceptor } from './common/shared/interceptors/response-transform.interceptor';
@@ -16,23 +17,26 @@ const addOriginIfPresent = (target: Set<string>, value?: string | null) => {
   }
 };
 
-export const resolveCorsOrigins = (): string[] => {
+export const resolveCorsOrigins = (): CorsOptions['origin'] => {
   const env = process.env.NODE_ENV ?? 'development';
   const vercelEnv = process.env.VERCEL_ENV ?? '';
   const branch = (process.env.VERCEL_GIT_COMMIT_REF ?? '').toLowerCase();
-  const isProdEnv = env === 'production' && vercelEnv !== 'preview';
-  const isDevBranchDeploy = branch === DEV_BRANCH_NAME;
+  const devOrigin = process.env.CORS_ORIGIN_DEV ?? DEV_BRANCH_FALLBACK_ORIGIN;
+  const prodOrigin = process.env.CORS_ORIGIN_PROD;
+
+  const shouldAllowAll =
+    env !== 'production' ||
+    vercelEnv === 'development' ||
+    branch === DEV_BRANCH_NAME;
+
+  if (shouldAllowAll) {
+    return true;
+  }
 
   const origins = new Set<string>();
   DEFAULT_LOCAL_ORIGINS.forEach((origin) => origins.add(origin));
 
-  const devOrigin = process.env.CORS_ORIGIN_DEV ?? DEV_BRANCH_FALLBACK_ORIGIN;
-  const prodOrigin = process.env.CORS_ORIGIN_PROD;
-
-  if (isDevBranchDeploy) {
-    addOriginIfPresent(origins, devOrigin);
-    addOriginIfPresent(origins, DEV_BRANCH_FALLBACK_ORIGIN);
-  } else if (isProdEnv) {
+  if (vercelEnv === 'production') {
     addOriginIfPresent(origins, prodOrigin);
   } else {
     addOriginIfPresent(origins, devOrigin);
