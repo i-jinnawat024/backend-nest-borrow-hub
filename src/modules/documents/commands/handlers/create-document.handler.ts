@@ -8,7 +8,7 @@ import { QueryFailedError } from 'typeorm';
 import {
   FREEMIUM_CONTACT_MESSAGE,
   FREEMIUM_LIMITS,
-} from 'src/common/constants/freemium.constant';
+} from '../../../../common/constants/freemium.constant';
 @CommandHandler(CreateDocumentCommand)
 export class CreateDocumentHandler
   implements ICommandHandler<CreateDocumentCommand>

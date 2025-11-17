@@ -1,4 +1,4 @@
-import { FREEMIUM_LIMITS } from 'src/common/constants/freemium.constant';
+import { FREEMIUM_LIMITS } from '../../../../common/constants/freemium.constant';
 import { UserEmail } from '../value-objects/user-email.vo';
 import { UserId } from '../value-objects/user-id.vo';
 import { UserName } from '../value-objects/user-name.vo';
@@ -137,6 +137,11 @@ export class User {
 
   changePassword(hashedPassword: string): void {
     this.props.password = hashedPassword;
+    this.touch();
+  }
+
+  changeEmail(email: string): void {
+    this.props.email = UserEmail.create(email).value;
     this.touch();
   }
 

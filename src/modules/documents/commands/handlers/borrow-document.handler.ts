@@ -13,7 +13,7 @@ import { HistoryAdapter } from 'src/modules/histories/adapters/history.adapter';
 import {
   FREEMIUM_CONTACT_MESSAGE,
   FREEMIUM_LIMITS,
-} from 'src/common/constants/freemium.constant';
+} from '../../../../common/constants/freemium.constant';
 
 @CommandHandler(BorrowDocumentCommand)
 export class BorrowDocumentHandler
