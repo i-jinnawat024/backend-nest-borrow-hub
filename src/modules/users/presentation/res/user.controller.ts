@@ -71,7 +71,7 @@ export class UserController {
     @Body() body: UpdateUserDto,
   ): Promise<UserResponseDto> {
     return this.commandBus.execute(
-      new UpdateUserCommand(id, body.firstName, body.lastName),
+      new UpdateUserCommand(id, body.firstName, body.lastName, body.email, body.password),
     );
   }
 
