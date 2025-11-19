@@ -27,6 +27,18 @@ export class DocumentRepository extends Repository<DocumentOrmEntity> {
     return this.repo.save(result);
   }
 
+  async deleteDocument(id: number): Promise<void> {
+    await this.repo
+      .createQueryBuilder()
+      .update(DocumentOrmEntity)
+      .set({
+        updatedAt: () => 'CURRENT_TIMESTAMP',
+        deletedAt: () => 'CURRENT_TIMESTAMP',
+      })
+      .where('id = :id', { id })
+      .execute();
+  }
+
   updateDocument(document: Partial<DocumentOrmEntity>) {
     if (!document.id) {
       throw new BadRequestException('document.id is required for update');
