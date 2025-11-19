@@ -105,7 +105,15 @@ export class TypeormUserRepository implements UserRepository {
   }
 
   async remove(userId: UserId): Promise<void> {
-    await this.ormRepo.softDelete({ id: userId.value });
+    await this.ormRepo
+      .createQueryBuilder()
+      .update(UserOrmEntity)
+      .set({
+        updatedAt: () => 'CURRENT_TIMESTAMP',
+        deletedAt: () => 'CURRENT_TIMESTAMP',
+      })
+      .where('id = :id', { id: userId.value })
+      .execute();
   }
 
   private async buildRolesMap(
