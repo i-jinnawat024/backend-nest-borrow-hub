@@ -14,6 +14,7 @@ import { BorrowDocumentHandler } from './commands/handlers/borrow-document.handl
 import { UserModule } from '../users/user.module';
 import { HistoryModule } from '../histories/history.module';
 import { ReturnDocumentHandler } from './commands/handlers/return-document.handler';
+import { DeleteDocumentHandler } from './commands/handlers/delete-document.handler';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ReturnDocumentHandler } from './commands/handlers/return-document.handl
     UpdateDocumentHandler,
     BorrowDocumentHandler,
     ReturnDocumentHandler,
+    DeleteDocumentHandler,
     DocumentAdapter,
   ],
   exports: [DocumentAdapter],

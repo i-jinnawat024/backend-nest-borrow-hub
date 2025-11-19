@@ -5,6 +5,7 @@ import { UpdateDocumentDto } from '../dtos/update-document.dto';
 import { GetDocumentQuery } from '../queries/impl/get-documnet.query';
 import { DocumentOrmEntity } from '../entities/document.entity';
 import { GetDocumentListQuery } from '../queries/impl/get-document-list.query';
+import { DeleteDocumentCommand } from '../commands/impl/delete-document.command';
 
 @Injectable()
 export class DocumentAdapter {
@@ -23,5 +24,9 @@ export class DocumentAdapter {
 
   async getDocumentList() {
     return this.queryBus.execute(new GetDocumentListQuery());
+  }
+
+  async deleteDocument(id: number): Promise<void> {
+    await this.commandBus.execute(new DeleteDocumentCommand(id));
   }
 }

@@ -1,8 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Logger,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -19,6 +24,7 @@ import { BorrowDocumentDto } from './dtos/borrow-document.dto';
 import { BorrowDocumentCommand } from './commands/impl/borrow-document.command';
 import { ReturnDocumentCommand } from './commands/impl/return-document.command';
 import { ReturnDocumentDto } from './dtos/return.document.dto';
+import { DeleteDocumentCommand } from './commands/impl/delete-document.command';
 
 @Controller('documents')
 export class DocumentController {
@@ -56,5 +62,11 @@ export class DocumentController {
   @Put('return')
   returnDocument(@Body() body: ReturnDocumentDto) {
     return this.commandBus.execute(new ReturnDocumentCommand(body));
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteDocument(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.commandBus.execute(new DeleteDocumentCommand(id));
   }
 }
